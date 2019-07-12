@@ -13,7 +13,7 @@ spec:
     spec: 
       containers:
       - name: slave
-        image: gcr.io/google_samples/bg-redisslave:v1 # Imagem específica
+        image: redis # Imagem específica
         resources:
           requests:
             cpu: 100m
