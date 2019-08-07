@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache2-deployment
+  labels:
+    app: apache2-php7
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apache2-php7
+  template:
+    metadata:
+      labels:
+        app: apache2-php7
+    spec:
+      containers:
+      - name: apache-php7
+        image: webdevops/php-apache:7.2
+        ports:
+        - containerPort: 80
