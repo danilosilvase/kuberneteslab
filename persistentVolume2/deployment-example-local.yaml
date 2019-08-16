@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-example-local
+  labels: 
+    app: apache-server-local
+spec: 
+  selector: 
+    matchLabels: 
+      app: apache-server-local 
+      tier: front 
+  strategy: 
+    type: Recreate
+  template: 
+    metadata: 
+      labels: 
+        app: apache-server-local
+        tier: front
+    spec: 
+      volumes: 
+      - name: my-local-pv
+        persistentVolumeClaim: 
+          claimName: my-claim
+      containers: 
+        - name: pod-example001
+          image: webdevops/php-apache:7.2 
+          ports: 
+            - containerPort: 80
+              name: "apache-server"
+          volumeMounts: 
+            - mountPath: "/app"
+              name: my-local-pv

@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: service-apache2
+  labels:
+    app: apache2
+spec:
+  ports:
+    - port: 80
+  selector:    
+    app: apache2
+    tier: front
+  type: LoadBalancer
+  
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: task-pv-volume
+    labels: 
+    type: local
+    spec: 
+    capacity: 
+   storage: 2Gi
+       accessModes: 
+   - ReadWriteOnce
+     hostPath:
+path: "/volumes/data1/"
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apache-pv-clain 
+  labels: 
+    app: apache2 
+spec: 
+  accessModes:
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 2Gi
+
+---
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: deployment-apache2
+  labels: 
+    app: apache2
+spec: 
+  selector: 
+    matchLabels: 
+      app: apache2
+      tier: front
+  strategy: 
+    type:  Recreate
+  template: 
+    metadata: 
+      labels: 
+        app: apache2
+        tier: front 
+    spec: 
+      containers: 
+      - image: webdevops/php-apache:7.2
+        name: apache2
+        ports: 
+        - containerPort: 80
+          name: apache2
+        volumeMounts: 
+        - name: apache-persist-storage
+          mountPath: /app
+      volumes: 
+      - name: apache-persist-storage
+        persistentVolumeClaim:
+          claimName: apache-pv-claim
+          
+            
+  
+

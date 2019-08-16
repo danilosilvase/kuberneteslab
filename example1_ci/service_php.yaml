@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: apache-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: apache2-php7
+  ports:
+    - protocol: TCP
+      port: 80
+

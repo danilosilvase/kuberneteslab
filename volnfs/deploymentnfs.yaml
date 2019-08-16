@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-example
+  labels: 
+    app: apache-server
+spec: 
+  selector: 
+    matchLabels: 
+      app: apache-server 
+      tier: front 
+  strategy: 
+    type: Recreate
+  template: 
+    metadata: 
+      labels: 
+        app: apache-server 
+        tier: front
+    spec: 
+      volumes: 
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: myapp-nfs          
+      containers: 
+        - name: pod-example 
+          image: webdevops/php-apache:7.2 
+          ports: 
+            - containerPort: 80
+              name: "apache-server"
+          volumeMounts: 
+            - mountPath: "/app"
+              name: nfs-volume
+

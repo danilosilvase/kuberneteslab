@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example
+spec: 
+  volumes: 
+    - name: pv-example
+      persistentVolumeClaim: 
+        claimName: pvc-example
+  containers: 
+    - name: pod-example 
+      image: webdevops/php-apache:7.2 
+      ports: 
+        - containerPort: 80
+          name: "apache-server"
+      volumeMounts: 
+        - mountPath: "/app"
+          name: pv-example
